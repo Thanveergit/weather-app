@@ -1,0 +1,76 @@
+import type { weatherData } from "@/api/types"
+import { format } from "date-fns";
+import { Compass, Gauge, icons, Sunrise, Sunset } from "lucide-react";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "./ui/card";
+
+interface WeatherDetailsProps {
+     data:weatherData
+}
+
+const WeatherDetails = ({data}:WeatherDetailsProps) => {
+  const {wind,main,sys} = data;
+
+  const getWindDirection = (degree:number)=>{
+    const direction = ["N","NE","E","SE","S","SW","W","NW"];
+    const index = Math.round(((degree %= 360)<0?degree+360:degree)/45)%8;
+    return direction[index]
+  }
+
+  const formatTime = (timestamp:number)=>{
+      return format(new Date(timestamp * 1000),'h:mm a');
+  }
+
+  const details = [
+    {
+      title:"Sunrise",
+      value:formatTime(sys.sunrise),
+      icon:Sunrise,
+      color:'text-orange-500'
+    },
+    {
+      title:"Sunset",
+      value:formatTime(sys.sunset),
+      icon:Sunset,
+      color:'text-blue-500'
+    },
+    {
+      title:"Wind Direction",
+      value:`${getWindDirection(wind.deg)} (${wind.deg}°) `,
+      icon:Compass,
+      color:'text-green-500'
+    },
+    {
+      title:"Pressure",
+      value:`${main.pressure} hPa`,
+      icon:Gauge,
+      color:'text-purple-500'
+    }
+  ]
+  return (
+    <Card>
+  <CardHeader>
+    <CardTitle>Weather Details</CardTitle>
+  </CardHeader>
+  <CardContent>
+    
+    <div className="grid gap-6 sm:grid-cols-2">
+      {details.map((detail)=>{
+        return <div 
+        key={detail.title}
+        className="flex items-center gap-3 border p-4 rounded-lg"
+        >
+           <detail.icon className={`h-5 w-5 ${detail.color}`}/>
+           <div>
+            <p>{detail.title}</p>
+            <p>{detail.value}</p>
+           </div>
+        </div>
+      })}
+    </div>
+  </CardContent>
+  
+</Card>
+  )
+}
+
+export default WeatherDetails
