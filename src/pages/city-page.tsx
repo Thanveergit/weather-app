@@ -7,7 +7,6 @@ import WeatherDetails from '@/components/weather-details'
 import WeatherForcast from '@/components/weather-forcast'
 import { useForcasteQurery, useWeatherQuery } from '@/hooks/use-weather'
 import { AlertTriangle } from 'lucide-react'
-import React from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 const CityPage = () => {
